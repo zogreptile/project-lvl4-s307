@@ -2,9 +2,6 @@
   "name": "yet-another-slack",
   "version": "0.0.1",
   "main": "dist/index.js",
-  "bin": {
-    "hexlet": "dist/bin/hexlet.js"
-  },
   "engines": {
     "node": "9"
   },
@@ -13,13 +10,14 @@
     "build-server": "babel server --out-dir dist --source-maps inline",
     "build-app": "npx webpack -p --env production",
     "build": "npm run build-app && npm run build-server",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "start": "node ./dist/bin/slack.js"
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:hexlet/frontend_l4_chat_project.git"
+    "url": "https://github.com/zogreptile/project-lvl4-s307"
   },
-  "author": "Kirill Mokevnin",
+  "author": "More Mone",
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.0.0-beta.46",
