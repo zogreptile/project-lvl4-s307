@@ -19,9 +19,6 @@ export default class ChannelsList extends React.Component {
     const { channels, messages, currentChannelId } = this.props;
     const channelClasses = (id) => cn({
       'list-group-item': true,
-      'd-flex': true,
-      'justify-content-between': true,
-      'align-items-center': true,
       'list-group-item-secondary': currentChannelId === id,
     });
 
