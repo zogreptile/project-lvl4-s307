@@ -1,5 +1,14 @@
 import React from 'react';
+import cn from 'classnames';
+import { connect } from 'react-redux';
 
+const mapStateToProps = state => ({
+  channels: state.channels,
+  messages: state.messages,
+  currentChannelId: state.currentChannelId,
+});
+
+@connect(mapStateToProps)
 export default class ChannelsList extends React.Component {
   getMessagesNumber = (id) => {
     const channelMessages = this.props.messages.filter(message => message.channelId === id);
@@ -7,15 +16,19 @@ export default class ChannelsList extends React.Component {
   };
 
   renderChannels = () => {
-    const { channels, messages } = this.props;
+    const { channels, messages, currentChannelId } = this.props;
+    const channelClasses = (id) => cn({
+      'list-group-item': true,
+      'd-flex': true,
+      'justify-content-between': true,
+      'align-items-center': true,
+      'list-group-item-secondary': currentChannelId === id,
+    });
 
     return (
       <ul className="list-group">
         {channels.map(({ id, name }) =>
-          <li key={id} className="list-group-item d-flex justify-content-between align-items-center">
-            {name}
-            <span className="badge badge-primary badge-pill">{this.getMessagesNumber(id)}</span>
-          </li>)}
+          <li key={id} className={channelClasses(id)}>{name}</li>)}
       </ul>
     );
   }

@@ -1,10 +1,16 @@
 import React from 'react';
-import ChannelsListContainer from '../containers/ChannelsList.js';
+import ChannelsList from './ChannelsList';
+import Chat from './Chat';
+import MessageForm from './MessageForm';
 
 const App = () => {
   return (
     <div className="row mt-4">
-      <ChannelsListContainer />
+      <ChannelsList />
+      <div className="col-sm-9">
+        <Chat />
+        <MessageForm />
+      </div>
     </div>
   );
 };
