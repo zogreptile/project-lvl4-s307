@@ -14,7 +14,12 @@ export default class Chat extends React.Component {
   render() {
     return (
       <div className="d-flex flex-column bd-highlight mb-3">
-        {this.props.messages.map(item => <Message key={item.id}>{item.text}</Message>)}
+        {this.props.messages.map(item =>
+          <Message key={item.id}>
+            <small className="font-weight-bold">{item.username}</small><br />
+            {item.text}
+          </Message>
+        )}
       </div>
     );
   }

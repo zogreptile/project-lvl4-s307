@@ -1,6 +1,7 @@
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
+import cookies from 'js-cookie';
 import * as actionCreators from '../actions/index';
 
 const mapStateToProps = state => ({
@@ -14,6 +15,7 @@ export default class MessageForm extends React.Component {
   sendMessage = (value) => {
     this.props.sendMessage({
       ...value,
+      username: cookies.get('username'),
       channelId: this.props.currentChannelId,
     });
     this.props.reset();

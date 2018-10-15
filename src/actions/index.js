@@ -12,7 +12,12 @@ export const sendMessage = message => async (dispatch) => {
   dispatch(sendMessageRequest());
   try {
     await axios.post(routes.messagesUrl(message.channelId), {
-      data: { attributes: { text: message.text } },
+      data: {
+        attributes: {
+          text: message.text,
+          username: message.username,
+        },
+      },
     });
   } catch (err) {
     dispatch(sendMessageFailure(err));
