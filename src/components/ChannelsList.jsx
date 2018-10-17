@@ -1,38 +1,44 @@
 import React from 'react';
 import cn from 'classnames';
 import { connect } from 'react-redux';
+import * as actionCreators from '../actions';
 
 const mapStateToProps = state => ({
   channels: state.channels,
-  messages: state.messages,
   currentChannelId: state.currentChannelId,
 });
 
-@connect(mapStateToProps)
+@connect(mapStateToProps, actionCreators)
 export default class ChannelsList extends React.Component {
-  getMessagesNumber = (id) => {
-    const channelMessages = this.props.messages.filter(message => message.channelId === id);
-    return channelMessages.length;
-  };
+  switchChannel = id => () => {
+    this.props.switchChannel(id);
+  }
 
   renderChannels = () => {
-    const { channels, messages, currentChannelId } = this.props;
+    const { channels, currentChannelId } = this.props;
     const channelClasses = (id) => cn({
+      'text-left': true,
       'list-group-item': true,
       'list-group-item-secondary': currentChannelId === id,
     });
 
     return (
-      <ul className="list-group">
+      <div className="list-group">
         {channels.map(({ id, name }) =>
-          <li key={id} className={channelClasses(id)}>{name}</li>)}
-      </ul>
+          <button
+            key={id}
+            className={channelClasses(id)}
+            onClick={this.switchChannel(id)}
+          >
+            # {name}
+          </button>)}
+      </div>
     );
   }
 
   render() {
     return (
-      <aside className="col-sm-3">
+      <aside className="col-sm-3 mb-3">
         <h3>Channels</h3>
         {this.renderChannels()}
       </aside>
