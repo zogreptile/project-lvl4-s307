@@ -8,10 +8,13 @@ import faker from 'faker/locale/ru';
 import initState from 'gon';
 import cookies from 'js-cookie';
 import io from 'socket.io-client';
+import 'bootstrap/js/src/modal';
+import 'bootstrap/js/src/util';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/application.css';
 import App from './components/App';
 import reducers from './reducers';
+import * as actionsCreators from './actions';
 
 if (!cookies.get('username')) {
   const newUsername = faker.name.findName();
@@ -32,12 +35,13 @@ const store = createStore(
 );
 
 const socket = io();
-socket.on('newMessage', ({ data }) => {
-  store.dispatch({
-    type: 'MESSAGE_SEND_SUCCESS',
-    payload: data.attributes,
+socket
+  .on('newMessage', ({ data: { attributes } }) => {
+    store.dispatch(actionsCreators.sendMessageSuccess(attributes));
+  })
+  .on('newChannel', ({ data: { attributes }  }) => {
+    store.dispatch(actionsCreators.addChannelSuccess(attributes));
   });
-});
 
 ReactDOM.render(
   <Provider store={store}>

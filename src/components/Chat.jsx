@@ -33,7 +33,7 @@ export default class Chat extends React.Component {
     const currentUser = cookies.get('username');
 
     return (
-      <div className="d-flex flex-column bd-highlight mb-3">
+      <div className="d-flex flex-column-reverse bd-highlight mb-3">
         {this.props.messages
           .filter(m => m.channelId === this.props.currentChannelId)
           .map(item =>

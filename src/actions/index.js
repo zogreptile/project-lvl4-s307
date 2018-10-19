@@ -22,6 +22,24 @@ export const sendMessage = message => async (dispatch) => {
   }
 };
 
-export const addChannel = createAction('CHANNEL_ADD');
+export const addChannelRequest = createAction('CHANNEL_ADD_REQUEST');
+export const addChannelSuccess = createAction('CHANNEL_ADD_SUCCESS');
+export const addChannelFailure = createAction('CHANNEL_ADD_FAILURE');
+
+export const addChannel = channelName => async (dispatch) => {
+  dispatch(addChannelRequest());
+  try {
+    await axios.post(routes.channelsUrl(), {
+      data: {
+        attributes: {
+          name: channelName,
+        },
+      },
+    });
+  } catch (err) {
+    dispatch(addChannelFailure(err));
+  }
+};
+
 export const removeChannel = createAction('CHANNEL_REMOVE');
 export const switchChannel = createAction('CHANNEL_SWITCH');

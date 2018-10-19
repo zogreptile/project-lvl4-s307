@@ -22,10 +22,11 @@ export default class MessageForm extends React.Component {
   }
 
   render() {
-    const { messageSubmitState, dirty } = this.props;
-    const isDisabled = dirty === false || messageSubmitState === false;
+    const { messageSubmitState, pristine, handleSubmit } = this.props;
+    const isDisabled = pristine || messageSubmitState === false;
+
     return (
-      <form className="d-flex" onSubmit={this.props.handleSubmit(this.sendMessage)}>
+      <form className="d-flex mb-3" onSubmit={handleSubmit(this.sendMessage)}>
         <Field className="form-control" name="text" component="input" autoComplete="off"/>
         <button type="submit" className="btn btn-dark" disabled={isDisabled}>Send</button>
       </form>

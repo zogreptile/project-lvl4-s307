@@ -4,8 +4,8 @@ import { combineReducers } from 'redux';
 import * as actions from '../actions';
 
 const channels = handleActions({
-  [actions.addChannel](state) {
-    return { ...state };
+  [actions.addChannelSuccess](state, { payload }) {
+    return [...state, payload];
   },
 }, []);
 
