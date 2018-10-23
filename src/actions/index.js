@@ -22,10 +22,13 @@ export const sendMessage = message => async (dispatch) => {
   }
 };
 
+export const switchChannel = createAction('CHANNEL_SWITCH');
+
+export const toggleAddChannelModal = createAction('ADD_CHANNEL_MODAL_TOGGLE');
+
 export const addChannelRequest = createAction('CHANNEL_ADD_REQUEST');
 export const addChannelSuccess = createAction('CHANNEL_ADD_SUCCESS');
 export const addChannelFailure = createAction('CHANNEL_ADD_FAILURE');
-
 export const addChannel = channelName => async (dispatch) => {
   dispatch(addChannelRequest());
   try {
@@ -36,10 +39,47 @@ export const addChannel = channelName => async (dispatch) => {
         },
       },
     });
+    dispatch(toggleAddChannelModal({ isOpen: false }));
   } catch (err) {
     dispatch(addChannelFailure(err));
+    dispatch(toggleAddChannelModal({ isOpen: false }));
   }
 };
 
-export const removeChannel = createAction('CHANNEL_REMOVE');
-export const switchChannel = createAction('CHANNEL_SWITCH');
+export const toggleRemoveChannelModal = createAction('REMOVE_CHANNEL_MODAL_TOGGLE');
+
+export const removeChannelRequest = createAction('CHANNEL_REMOVE_REQUEST');
+export const removeChannelSuccess = createAction('CHANNEL_REMOVE_SUCCESS');
+export const removeChannelFailure = createAction('CHANNEL_REMOVE_FAILURE');
+export const removeChannel = id => async (dispatch) => {
+  dispatch(removeChannelRequest());
+  try {
+    await axios.delete(routes.channelUrl(id));
+    dispatch(toggleRemoveChannelModal({ isOpen: false }));
+  } catch (err) {
+    dispatch(removeChannelFailure(err));
+    dispatch(toggleRemoveChannelModal({ isOpen: false }));
+  }
+};
+
+export const toggleRenameChannelModal = createAction('RENAME_CHANNEL_MODAL_TOGGLE');
+
+export const renameChannelRequest = createAction('CHANNEL_RENAME_REQUEST');
+export const renameChannelSuccess = createAction('CHANNEL_RENAME_SUCCESS');
+export const renameChannelFailure = createAction('CHANNEL_RENAME_FAILURE');
+export const renameChannel = (id, channelName) => async (dispatch) => {
+  dispatch(renameChannelRequest());
+  try {
+    await axios.patch(routes.channelUrl(id), {
+      data: {
+        attributes: {
+          name: channelName,
+        },
+      },
+    });
+    dispatch(toggleRenameChannelModal({ isOpen: false }));
+  } catch (err) {
+    dispatch(renameChannelFailure(err));
+    dispatch(toggleRenameChannelModal({ isOpen: false }));
+  }
+};

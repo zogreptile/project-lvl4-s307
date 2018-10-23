@@ -8,13 +8,11 @@ import faker from 'faker/locale/ru';
 import initState from 'gon';
 import cookies from 'js-cookie';
 import io from 'socket.io-client';
-import 'bootstrap/js/src/modal';
-import 'bootstrap/js/src/util';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/application.css';
 import App from './components/App';
 import reducers from './reducers';
-import * as actionsCreators from './actions';
+import * as actions from './actions';
 
 if (!cookies.get('username')) {
   const newUsername = faker.name.findName();
@@ -37,10 +35,16 @@ const store = createStore(
 const socket = io();
 socket
   .on('newMessage', ({ data: { attributes } }) => {
-    store.dispatch(actionsCreators.sendMessageSuccess(attributes));
+    store.dispatch(actions.sendMessageSuccess(attributes));
   })
   .on('newChannel', ({ data: { attributes }  }) => {
-    store.dispatch(actionsCreators.addChannelSuccess(attributes));
+    store.dispatch(actions.addChannelSuccess(attributes));
+  })
+  .on('removeChannel', ({ data }) => {
+    store.dispatch(actions.removeChannelSuccess(data));
+  })
+  .on('renameChannel', ({ data }) => {
+    store.dispatch(actions.renameChannelSuccess(data));
   });
 
 ReactDOM.render(

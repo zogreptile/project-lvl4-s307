@@ -1,6 +1,7 @@
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
+import { Button } from 'react-bootstrap';
 import cookies from 'js-cookie';
 import * as actionCreators from '../actions';
 
@@ -28,7 +29,7 @@ export default class MessageForm extends React.Component {
     return (
       <form className="d-flex mb-3" onSubmit={handleSubmit(this.sendMessage)}>
         <Field className="form-control" name="text" component="input" autoComplete="off"/>
-        <button type="submit" className="btn btn-dark" disabled={isDisabled}>Send</button>
+        <Button variant="dark" type="submit" disabled={isDisabled}>Send</Button>
       </form>
     );
   }
