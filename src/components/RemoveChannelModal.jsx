@@ -1,5 +1,5 @@
 import React from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 import * as actionCreators from '../actions';
@@ -12,18 +12,18 @@ const mapStateToProps = state => ({
 @reduxForm({ form: 'removeChannelForm' })
 export default class RemoveChannelModal extends React.Component {
   submit = () => {
-    const { channelId } = this.props.removeChannelModal;
-    this.props.removeChannel(channelId);
-    this.props.reset();
+    const { removeChannel, reset, removeChannelModal: { channelId } } = this.props;
+    removeChannel(channelId);
+    reset();
   }
 
   hideModal = () => {
-    this.props.toggleRemoveChannelModal({ isOpen: false });
+    const { toggleRemoveChannelModal } = this.props;
+    toggleRemoveChannelModal({ isOpen: false });
   }
 
   render() {
     const { handleSubmit, removeChannelModal } = this.props;
-
     return (
       <Modal show={removeChannelModal.isOpen} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
@@ -35,6 +35,6 @@ export default class RemoveChannelModal extends React.Component {
           </form>
         </Modal.Body>
       </Modal>
-    )
+    );
   }
-};
+}

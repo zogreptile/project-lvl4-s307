@@ -14,19 +14,18 @@ const mapStateToProps = state => ({
 @connect(mapStateToProps, actionCreators)
 export default class ChannelsList extends React.Component {
   switchChannel = id => () => {
-    this.props.switchChannel(id);
-  }
-
-  removeChannel = id => () => {
-    this.props.switchChannel(id);
+    const { switchChannel } = this.props;
+    switchChannel(id);
   }
 
   showAddChannelModal = () => {
-    this.props.toggleAddChannelModal({ isOpen: true });
+    const { toggleAddChannelModal } = this.props;
+    toggleAddChannelModal({ isOpen: true });
   }
 
   showRemoveChannelModal = id => () => {
-    this.props.toggleRemoveChannelModal({
+    const { toggleRemoveChannelModal } = this.props;
+    toggleRemoveChannelModal({
       isOpen: true,
       channelId: id,
     });
@@ -34,14 +33,14 @@ export default class ChannelsList extends React.Component {
 
   renderChannels = () => {
     const { channels, currentChannelId } = this.props;
-    const listItemClasses = (id) => cn({
+    const listItemClasses = id => cn({
       'p-0': true,
       'd-flex': true,
       'list-group-item-secondary': currentChannelId === id,
     });
 
     return (
-      <>
+      <React.Fragment>
         <Button
           block
           variant="dark"
@@ -52,7 +51,7 @@ export default class ChannelsList extends React.Component {
         </Button>
 
         <ListGroup as="ul">
-          {channels.map(({ id, name, removable }) =>
+          {channels.map(({ id, name, removable }) => (
             <ListGroup.Item as="li" key={id} className={listItemClasses(id)}>
               <Button
                 block
@@ -60,22 +59,26 @@ export default class ChannelsList extends React.Component {
                 className="bg-transparent text-left border-0"
                 onClick={this.switchChannel(id)}
               >
-                # {name}
+                {`# ${name}`}
               </Button>
 
               {
-                removable ?
-                  <Button
-                    variant="light"
-                    className="bg-transparent text-danger border-0"
-                    onClick={this.showRemoveChannelModal(id)}
-                  >×</Button> :
-                  null
+                removable
+                  ? (
+                    <Button
+                      variant="light"
+                      className="bg-transparent text-danger border-0"
+                      onClick={this.showRemoveChannelModal(id)}
+                    >
+                    ×
+                    </Button>
+                  )
+                  : null
               }
             </ListGroup.Item>
-          )}
+          ))}
         </ListGroup>
-      </>
+      </React.Fragment>
     );
   }
 
@@ -85,6 +88,6 @@ export default class ChannelsList extends React.Component {
         <h3 className="mb-3">Channels</h3>
         {this.renderChannels()}
       </Col>
-    )
+    );
   }
-};
+}

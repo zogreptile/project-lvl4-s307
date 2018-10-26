@@ -13,11 +13,7 @@ import '../assets/application.css';
 import App from './components/App';
 import reducers from './reducers';
 import * as actions from './actions';
-
-if (!cookies.get('username')) {
-  const newUsername = faker.name.findName();
-  cookies.set('username', newUsername);
-}
+import { UserContext } from './context.js';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
@@ -47,9 +43,16 @@ socket
     store.dispatch(actions.renameChannelSuccess(data));
   });
 
+const username = cookies.get('username') || faker.name.findName();
+if (!cookies.get('username')) {
+  cookies.set('username', username);
+}
+
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <UserContext.Provider value={username}>
+      <App />
+    </UserContext.Provider>
   </Provider>,
   document.getElementById('chat'),
 );

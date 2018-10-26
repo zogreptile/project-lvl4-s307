@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import cn from 'classnames';
-import cookies from 'js-cookie';
 import * as actionCreators from '../actions';
 
 const mapStateToProps = state => ({
@@ -25,24 +24,24 @@ const Message = ({ children, isAuthor }) => {
       {children}
     </div>
   );
-}
+};
 
 @connect(mapStateToProps, actionCreators)
 export default class Chat extends React.Component {
   render() {
-    const currentUser = cookies.get('username');
+    const { messages, currentChannelId, username } = this.props;
+    const channelMessages = messages.filter(m => m.channelId === currentChannelId);
 
     return (
       <div className="d-flex flex-column-reverse bd-highlight mb-3">
-        {this.props.messages
-          .filter(m => m.channelId === this.props.currentChannelId)
-          .map(item =>
-            <Message key={item.id} isAuthor={item.username === currentUser}>
-              <small className="font-weight-bold">{item.username}</small><br />
-              {item.text}
-            </Message>
-        )}
+        {channelMessages.map(item => (
+          <Message key={item.id} isAuthor={item.username === username}>
+            <small className="font-weight-bold">{item.username}</small>
+            <br />
+            {item.text}
+          </Message>
+        ))}
       </div>
     );
   }
-};
+}

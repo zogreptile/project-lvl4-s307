@@ -12,17 +12,18 @@ const mapStateToProps = state => ({
 @reduxForm({ form: 'renameChannelForm' })
 export default class RenameChannelModal extends React.Component {
   submit = id => (value) => {
-    this.props.renameChannel(id, value.channelNewName);
-    this.props.reset();
+    const { renameChannel, reset } = this.props;
+    renameChannel(id, value.channelNewName);
+    reset();
   }
 
   hideModal = () => {
-    this.props.toggleRenameChannelModal({ isOpen: false });
+    const { toggleRenameChannelModal } = this.props;
+    toggleRenameChannelModal({ isOpen: false });
   }
 
   render() {
     const { pristine, handleSubmit, renameChannelModal } = this.props;
-
     return (
       <Modal show={renameChannelModal.isOpen} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
@@ -35,6 +36,6 @@ export default class RenameChannelModal extends React.Component {
           </form>
         </Modal.Body>
       </Modal>
-    )
+    );
   }
-};
+}

@@ -3,6 +3,32 @@ import { reducer as formReducer } from 'redux-form';
 import { combineReducers } from 'redux';
 import * as actions from '../actions';
 
+const notification = handleActions({
+  [actions.showNotification](state, { payload: { isVisible, type, text } }) {
+    return {
+      ...state,
+      isVisible,
+      type,
+      text,
+    };
+  },
+  [actions.hideNotification](state) {
+    return { ...state, isVisible: false };
+  },
+  [actions.sendMessageFailure](state, { payload: { text } }) {
+    return { ...state, isVisible: true, text };
+  },
+  [actions.addChannelFailure](state, { payload: { text } }) {
+    return { ...state, isVisible: true, text };
+  },
+  [actions.removeChannelFailure](state, { payload: { text } }) {
+    return { ...state, isVisible: true, text };
+  },
+  [actions.renameChannelFailure](state, { payload: { text } }) {
+    return { ...state, isVisible: true, text };
+  },
+}, { isVisible: false, type: 'danger', text: '' });
+
 const channels = handleActions({
   [actions.addChannelSuccess](state, { payload }) {
     return [...state, payload];
@@ -21,11 +47,19 @@ const messages = handleActions({
   [actions.sendMessageSuccess](state, { payload }) {
     return [...state, payload];
   },
+  [actions.removeChannelSuccess](state, { payload }) {
+    const updatedMessages = state.filter(m => m.channelId !== payload.id);
+    return updatedMessages;
+  },
 }, []);
 
 const currentChannelId = handleActions({
   [actions.switchChannel](state, { payload }) {
     return payload;
+  },
+  [actions.removeChannelSuccess]() {
+    const defaultActiveChannel = 1;
+    return defaultActiveChannel;
   },
 }, null);
 
@@ -57,6 +91,7 @@ const renameChannelModal = handleActions({
 }, { isOpen: false, channelId: null });
 
 export default combineReducers({
+  notification,
   channels,
   messages,
   messageSubmitState,

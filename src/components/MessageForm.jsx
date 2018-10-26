@@ -2,7 +2,6 @@ import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import cookies from 'js-cookie';
 import * as actionCreators from '../actions';
 
 const mapStateToProps = state => ({
@@ -13,13 +12,20 @@ const mapStateToProps = state => ({
 @connect(mapStateToProps, actionCreators)
 @reduxForm({ form: 'messageForm' })
 export default class MessageForm extends React.Component {
-  sendMessage = (value) => {
-    this.props.sendMessage({
-      ...value,
-      username: cookies.get('username'),
-      channelId: this.props.currentChannelId,
+  submit = (value) => {
+    const {
+      sendMessage,
+      currentChannelId,
+      reset,
+      username,
+    } = this.props;
+
+    sendMessage({
+      text: value.text,
+      username,
+      channelId: currentChannelId,
     });
-    this.props.reset();
+    reset();
   }
 
   render() {
@@ -27,10 +33,10 @@ export default class MessageForm extends React.Component {
     const isDisabled = pristine || messageSubmitState === false;
 
     return (
-      <form className="d-flex mb-3" onSubmit={handleSubmit(this.sendMessage)}>
-        <Field className="form-control" name="text" component="input" autoComplete="off"/>
+      <form className="d-flex mb-3" onSubmit={handleSubmit(this.submit)}>
+        <Field className="form-control" name="text" component="input" autoComplete="off" />
         <Button variant="dark" type="submit" disabled={isDisabled}>Send</Button>
       </form>
     );
   }
-};
+}

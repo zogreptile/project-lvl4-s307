@@ -2,10 +2,12 @@ import axios from 'axios';
 import { createAction } from 'redux-actions';
 import routes from '../routes';
 
+export const showNotification = createAction('NOTIFICATION_SHOW');
+export const hideNotification = createAction('NOTIFICATION_HIDE');
+
 export const sendMessageRequest = createAction('MESSAGE_SEND_REQUEST');
 export const sendMessageSuccess = createAction('MESSAGE_SEND_SUCCESS');
 export const sendMessageFailure = createAction('MESSAGE_SEND_FAILURE');
-
 export const sendMessage = message => async (dispatch) => {
   dispatch(sendMessageRequest());
   try {
@@ -18,7 +20,9 @@ export const sendMessage = message => async (dispatch) => {
       },
     });
   } catch (err) {
-    dispatch(sendMessageFailure(err));
+    dispatch(sendMessageFailure({
+      text: 'Error occured. It may be problems on server or with your Internet connection.',
+    }));
   }
 };
 
@@ -41,7 +45,9 @@ export const addChannel = channelName => async (dispatch) => {
     });
     dispatch(toggleAddChannelModal({ isOpen: false }));
   } catch (err) {
-    dispatch(addChannelFailure(err));
+    dispatch(addChannelFailure({
+      text: 'Error occured. It may be problems on server or with your Internet connection.',
+    }));
     dispatch(toggleAddChannelModal({ isOpen: false }));
   }
 };
@@ -57,7 +63,9 @@ export const removeChannel = id => async (dispatch) => {
     await axios.delete(routes.channelUrl(id));
     dispatch(toggleRemoveChannelModal({ isOpen: false }));
   } catch (err) {
-    dispatch(removeChannelFailure(err));
+    dispatch(removeChannelFailure({
+      text: 'Error occured. It may be problems on server or with your Internet connection.',
+    }));
     dispatch(toggleRemoveChannelModal({ isOpen: false }));
   }
 };
@@ -79,7 +87,9 @@ export const renameChannel = (id, channelName) => async (dispatch) => {
     });
     dispatch(toggleRenameChannelModal({ isOpen: false }));
   } catch (err) {
-    dispatch(renameChannelFailure(err));
+    dispatch(renameChannelFailure({
+      text: 'Error occured. It may be problems on server or with your Internet connection.',
+    }));
     dispatch(toggleRenameChannelModal({ isOpen: false }));
   }
 };

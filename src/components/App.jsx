@@ -1,4 +1,5 @@
 import React from 'react';
+import { Row, Col } from 'react-bootstrap';
 import ChannelsList from './ChannelsList';
 import ChannelTitle from './ChannelTitle';
 import Chat from './Chat';
@@ -6,23 +7,28 @@ import MessageForm from './MessageForm';
 import AddChannelModal from './AddChannelModal';
 import RemoveChannelModal from './RemoveChannelModal';
 import RenameChannelModal from './RenameChannelModal';
+import Notification from './Notification';
+import { UserContext } from '../context';
 
-const App = () => {
-  return (
-    <>
-      <div className="row mt-4">
-        <ChannelsList />
-        <div className="col-sm-9">
-          <ChannelTitle />
-          <MessageForm />
-          <Chat />
-        </div>
-      </div>
-      <AddChannelModal />
-      <RemoveChannelModal />
-      <RenameChannelModal />
-    </>
-  );
-};
+const App = () => (
+  <UserContext.Consumer>
+    {username => (
+      <React.Fragment>
+        <Notification />
+        <Row className="mt-4">
+          <ChannelsList />
+          <Col sm={9}>
+            <ChannelTitle />
+            <MessageForm username={username} />
+            <Chat username={username} />
+          </Col>
+        </Row>
+        <AddChannelModal />
+        <RemoveChannelModal />
+        <RenameChannelModal />
+      </React.Fragment>
+    )}
+  </UserContext.Consumer>
+);
 
 export default App;
