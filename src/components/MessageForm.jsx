@@ -6,7 +6,6 @@ import * as actionCreators from '../actions';
 
 const mapStateToProps = state => ({
   currentChannelId: state.currentChannelId,
-  messageSubmitState: state.messageSubmitState,
 });
 
 @connect(mapStateToProps, actionCreators)
@@ -29,13 +28,12 @@ export default class MessageForm extends React.Component {
   }
 
   render() {
-    const { messageSubmitState, pristine, handleSubmit } = this.props;
-    const isDisabled = pristine || messageSubmitState === false;
+    const { pristine, handleSubmit, submitting } = this.props;
 
     return (
       <form className="d-flex mb-3" onSubmit={handleSubmit(this.submit)}>
         <Field className="form-control" name="text" component="input" autoComplete="off" />
-        <Button variant="dark" type="submit" disabled={isDisabled}>Send</Button>
+        <Button variant="dark" type="submit" disabled={pristine || submitting}>Send</Button>
       </form>
     );
   }

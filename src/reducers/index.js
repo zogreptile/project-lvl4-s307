@@ -63,15 +63,6 @@ const currentChannelId = handleActions({
   },
 }, null);
 
-const messageSubmitState = handleActions({
-  [actions.sendMessageSuccess]() {
-    return true;
-  },
-  [actions.sendMessageRequest]() {
-    return false;
-  },
-}, true);
-
 const addChannelModal = handleActions({
   [actions.toggleAddChannelModal](state, { payload: { isOpen } }) {
     return { isOpen };
@@ -94,7 +85,6 @@ export default combineReducers({
   notification,
   channels,
   messages,
-  messageSubmitState,
   currentChannelId,
   addChannelModal,
   removeChannelModal,
