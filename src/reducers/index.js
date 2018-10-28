@@ -81,6 +81,14 @@ const renameChannelModal = handleActions({
   },
 }, { isOpen: false, channelId: null });
 
+const form = formReducer.plugin({
+  messageForm: handleActions({
+    [actions.sendMessageSuccess]() {
+      return null;
+    },
+  }, null),
+});
+
 export default combineReducers({
   notification,
   channels,
@@ -89,5 +97,5 @@ export default combineReducers({
   addChannelModal,
   removeChannelModal,
   renameChannelModal,
-  form: formReducer,
+  form,
 });

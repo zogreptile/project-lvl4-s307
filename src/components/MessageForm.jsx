@@ -15,7 +15,6 @@ export default class MessageForm extends React.Component {
     const {
       sendMessage,
       currentChannelId,
-      reset,
       username,
     } = this.props;
 
@@ -24,7 +23,6 @@ export default class MessageForm extends React.Component {
       username,
       channelId: currentChannelId,
     });
-    reset();
   }
 
   render() {
