@@ -8,88 +8,94 @@ export const hideNotification = createAction('NOTIFICATION_HIDE');
 export const sendMessageRequest = createAction('MESSAGE_SEND_REQUEST');
 export const sendMessageSuccess = createAction('MESSAGE_SEND_SUCCESS');
 export const sendMessageFailure = createAction('MESSAGE_SEND_FAILURE');
-export const sendMessage = message => async (dispatch) => {
+export const sendMessage = message => (dispatch) => {
   dispatch(sendMessageRequest());
-  try {
-    await axios.post(routes.messagesUrl(message.channelId), {
+  return axios
+    .post(routes.messagesUrl(message.channelId), {
       data: {
         attributes: {
           text: message.text,
           username: message.username,
         },
       },
+    })
+    .catch(() => {
+      dispatch(sendMessageFailure({
+        text: 'Error occured. It may be problems on server or with your Internet connection.',
+      }));
     });
-  } catch (err) {
-    dispatch(sendMessageFailure({
-      text: 'Error occured. It may be problems on server or with your Internet connection.',
-    }));
-  }
 };
 
 export const switchChannel = createAction('CHANNEL_SWITCH');
 
-export const toggleAddChannelModal = createAction('ADD_CHANNEL_MODAL_TOGGLE');
+export const toggleAddChannelModal = createAction('CHANNEL_ADD_MODAL_TOGGLE');
 
 export const addChannelRequest = createAction('CHANNEL_ADD_REQUEST');
 export const addChannelSuccess = createAction('CHANNEL_ADD_SUCCESS');
 export const addChannelFailure = createAction('CHANNEL_ADD_FAILURE');
-export const addChannel = channelName => async (dispatch) => {
+export const addChannel = channelName => (dispatch) => {
   dispatch(addChannelRequest());
-  try {
-    await axios.post(routes.channelsUrl(), {
+  return axios
+    .post(routes.channelsUrl(), {
       data: {
         attributes: {
           name: channelName,
         },
       },
+    })
+    .then(() => {
+      dispatch(toggleAddChannelModal({ isOpen: false }));
+    })
+    .catch(() => {
+      dispatch(toggleAddChannelModal({ isOpen: false }));
+      dispatch(addChannelFailure({
+        text: 'Error occured. It may be problems on server or with your Internet connection.',
+      }));
     });
-    dispatch(toggleAddChannelModal({ isOpen: false }));
-  } catch (err) {
-    dispatch(addChannelFailure({
-      text: 'Error occured. It may be problems on server or with your Internet connection.',
-    }));
-    dispatch(toggleAddChannelModal({ isOpen: false }));
-  }
 };
 
-export const toggleRemoveChannelModal = createAction('REMOVE_CHANNEL_MODAL_TOGGLE');
+export const toggleRemoveChannelModal = createAction('CHANNEL_REMOVE_MODAL_TOGGLE');
 
 export const removeChannelRequest = createAction('CHANNEL_REMOVE_REQUEST');
 export const removeChannelSuccess = createAction('CHANNEL_REMOVE_SUCCESS');
 export const removeChannelFailure = createAction('CHANNEL_REMOVE_FAILURE');
-export const removeChannel = id => async (dispatch) => {
+export const removeChannel = id => (dispatch) => {
   dispatch(removeChannelRequest());
-  try {
-    await axios.delete(routes.channelUrl(id));
-    dispatch(toggleRemoveChannelModal({ isOpen: false }));
-  } catch (err) {
-    dispatch(removeChannelFailure({
-      text: 'Error occured. It may be problems on server or with your Internet connection.',
-    }));
-    dispatch(toggleRemoveChannelModal({ isOpen: false }));
-  }
+  return axios
+    .delete(routes.channelUrl(id))
+    .then(() => {
+      dispatch(toggleRemoveChannelModal({ isOpen: false }));
+    })
+    .catch(() => {
+      dispatch(toggleRemoveChannelModal({ isOpen: false }));
+      dispatch(removeChannelFailure({
+        text: 'Error occured. It may be problems on server or with your Internet connection.',
+      }));
+    });
 };
 
-export const toggleRenameChannelModal = createAction('RENAME_CHANNEL_MODAL_TOGGLE');
+export const toggleRenameChannelModal = createAction('CHANNEL_RENAME_MODAL_TOGGLE');
 
 export const renameChannelRequest = createAction('CHANNEL_RENAME_REQUEST');
 export const renameChannelSuccess = createAction('CHANNEL_RENAME_SUCCESS');
 export const renameChannelFailure = createAction('CHANNEL_RENAME_FAILURE');
-export const renameChannel = (id, channelName) => async (dispatch) => {
+export const renameChannel = (id, channelName) => (dispatch) => {
   dispatch(renameChannelRequest());
-  try {
-    await axios.patch(routes.channelUrl(id), {
+  return axios
+    .patch(routes.channelUrl(id), {
       data: {
         attributes: {
           name: channelName,
         },
       },
+    })
+    .then(() => {
+      dispatch(toggleRenameChannelModal({ isOpen: false }));
+    })
+    .catch(() => {
+      dispatch(toggleRenameChannelModal({ isOpen: false }));
+      dispatch(renameChannelFailure({
+        text: 'Error occured. It may be problems on server or with your Internet connection.',
+      }));
     });
-    dispatch(toggleRenameChannelModal({ isOpen: false }));
-  } catch (err) {
-    dispatch(renameChannelFailure({
-      text: 'Error occured. It may be problems on server or with your Internet connection.',
-    }));
-    dispatch(toggleRenameChannelModal({ isOpen: false }));
-  }
 };

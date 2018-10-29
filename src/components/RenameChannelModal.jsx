@@ -2,6 +2,7 @@ import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
+import cn from 'classnames';
 import * as actionCreators from '../actions';
 
 const mapStateToProps = state => ({
@@ -12,9 +13,8 @@ const mapStateToProps = state => ({
 @reduxForm({ form: 'renameChannelForm' })
 export default class RenameChannelModal extends React.Component {
   submit = id => (value) => {
-    const { renameChannel, reset } = this.props;
-    renameChannel(id, value.channelNewName);
-    reset();
+    const { renameChannel } = this.props;
+    return renameChannel(id, value.channelNewName);
   }
 
   hideModal = () => {
@@ -23,7 +23,17 @@ export default class RenameChannelModal extends React.Component {
   }
 
   render() {
-    const { pristine, handleSubmit, renameChannelModal } = this.props;
+    const {
+      pristine,
+      submitting,
+      handleSubmit,
+      renameChannelModal,
+    } = this.props;
+
+    const btnLoadingClass = cn({
+      'btn--loading': submitting,
+    });
+
     return (
       <Modal show={renameChannelModal.isOpen} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
@@ -31,8 +41,20 @@ export default class RenameChannelModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <form className="d-flex" onSubmit={handleSubmit(this.submit(renameChannelModal.channelId))}>
-            <Field className="form-control" name="channelNewName" component="input" autoComplete="off" />
-            <Button type="submit" variant="dark" disabled={pristine}>Add</Button>
+            <Field
+              className="form-control"
+              name="channelNewName"
+              component="input"
+              autoComplete="off"
+            />
+            <Button
+              className={btnLoadingClass}
+              type="submit"
+              variant="dark"
+              disabled={submitting || pristine}
+            >
+              Add
+            </Button>
           </form>
         </Modal.Body>
       </Modal>

@@ -2,6 +2,7 @@ import React from 'react';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
+import cn from 'classnames';
 import * as actionCreators from '../actions';
 
 const mapStateToProps = state => ({
@@ -12,9 +13,8 @@ const mapStateToProps = state => ({
 @reduxForm({ form: 'removeChannelForm' })
 export default class RemoveChannelModal extends React.Component {
   submit = () => {
-    const { removeChannel, reset, removeChannelModal: { channelId } } = this.props;
-    removeChannel(channelId);
-    reset();
+    const { removeChannel, removeChannelModal: { channelId } } = this.props;
+    return removeChannel(channelId);
   }
 
   hideModal = () => {
@@ -23,7 +23,12 @@ export default class RemoveChannelModal extends React.Component {
   }
 
   render() {
-    const { handleSubmit, removeChannelModal } = this.props;
+    const { submitting, handleSubmit, removeChannelModal } = this.props;
+
+    const btnLoadingClass = cn({
+      'btn--loading': submitting,
+    });
+
     return (
       <Modal show={removeChannelModal.isOpen} onHide={this.hideModal} centered>
         <Modal.Header closeButton>
@@ -31,7 +36,14 @@ export default class RemoveChannelModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <form className="d-flex" onSubmit={handleSubmit(this.submit)}>
-            <Button block type="submit" variant="danger">Remove</Button>
+            <Button
+              className={btnLoadingClass}
+              block
+              type="submit"
+              variant="danger"
+            >
+              Remove
+            </Button>
           </form>
         </Modal.Body>
       </Modal>

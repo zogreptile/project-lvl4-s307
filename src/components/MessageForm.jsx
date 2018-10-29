@@ -2,6 +2,7 @@ import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
+import cn from 'classnames';
 import * as actionCreators from '../actions';
 
 const mapStateToProps = state => ({
@@ -18,7 +19,7 @@ export default class MessageForm extends React.Component {
       username,
     } = this.props;
 
-    sendMessage({
+    return sendMessage({
       text: value.text,
       username,
       channelId: currentChannelId,
@@ -26,12 +27,23 @@ export default class MessageForm extends React.Component {
   }
 
   render() {
-    const { pristine, handleSubmit, submitting } = this.props;
+    const { pristine, submitting, handleSubmit } = this.props;
+
+    const btnLoadingClass = cn({
+      'btn--loading': submitting,
+    });
 
     return (
       <form className="d-flex mb-3" onSubmit={handleSubmit(this.submit)}>
         <Field className="form-control" name="text" component="input" autoComplete="off" />
-        <Button variant="dark" type="submit" disabled={pristine || submitting}>Send</Button>
+        <Button
+          className={btnLoadingClass}
+          variant="dark"
+          type="submit"
+          disabled={submitting || pristine}
+        >
+          Send
+        </Button>
       </form>
     );
   }

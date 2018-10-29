@@ -2,6 +2,7 @@ import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
+import cn from 'classnames';
 import * as actionCreators from '../actions';
 
 const mapStateToProps = state => ({
@@ -12,16 +13,26 @@ const mapStateToProps = state => ({
 @reduxForm({ form: 'addChannelForm' })
 export default class AddChannelModal extends React.Component {
   submit = (value) => {
-    this.props.addChannel(value.channelName);
-    this.props.reset();
+    const { addChannel } = this.props;
+    return addChannel(value.channelName);
   }
 
   hideModal = () => {
-    this.props.toggleAddChannelModal({ isOpen: false });
+    const { toggleAddChannelModal } = this.props;
+    toggleAddChannelModal({ isOpen: false });
   }
 
   render() {
-    const { pristine, handleSubmit, addChannelModal } = this.props;
+    const {
+      pristine,
+      submitting,
+      handleSubmit,
+      addChannelModal,
+    } = this.props;
+
+    const btnLoadingClass = cn({
+      'btn--loading': submitting,
+    });
 
     return (
       <Modal show={addChannelModal.isOpen} onHide={this.hideModal} centered>
@@ -30,11 +41,23 @@ export default class AddChannelModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <form className="d-flex" onSubmit={handleSubmit(this.submit)}>
-            <Field className="form-control" name="channelName" component="input" autoComplete="off" />
-            <Button type="submit" variant="dark" disabled={pristine}>Add</Button>
+            <Field
+              className="form-control"
+              name="channelName"
+              component="input"
+              autoComplete="off"
+            />
+            <Button
+              className={btnLoadingClass}
+              type="submit"
+              variant="dark"
+              disabled={submitting || pristine}
+            >
+              Add
+            </Button>
           </form>
         </Modal.Body>
       </Modal>
-    )
+    );
   }
-};
+}

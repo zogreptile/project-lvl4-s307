@@ -87,6 +87,21 @@ const form = formReducer.plugin({
       return null;
     },
   }, null),
+  addChannelForm: handleActions({
+    [actions.addChannelSuccess]() {
+      return null;
+    },
+  }, null),
+  renameChannelForm: handleActions({
+    [actions.renameChannelSuccess]() {
+      return null;
+    },
+  }, null),
+  removeChannelForm: handleActions({
+    [actions.removeChannelSuccess]() {
+      return null;
+    },
+  }, null),
 });
 
 export default combineReducers({
