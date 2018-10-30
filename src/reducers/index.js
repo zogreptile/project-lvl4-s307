@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions';
 import { reducer as formReducer } from 'redux-form';
 import { combineReducers } from 'redux';
+import { omit } from 'lodash';
 import * as actions from '../actions';
 
 const notification = handleActions({
@@ -30,16 +31,15 @@ const notification = handleActions({
 }, { isVisible: false, type: 'danger', text: '' });
 
 const channels = handleActions({
-  [actions.addChannelSuccess](state, { payload }) {
-    return [...state, payload];
+  [actions.addChannelSuccess](state, { payload: { channel } }) {
+    return { ...state, [channel.id]: channel };
   },
-  [actions.removeChannelSuccess](state, { payload }) {
-    const updatedChannels = state.filter(c => c.id !== payload.id);
+  [actions.removeChannelSuccess](state, { payload: { id } }) {
+    const updatedChannels = omit(state, id);
     return updatedChannels;
   },
-  [actions.renameChannelSuccess](state, { payload }) {
-    const unchangedChannels = state.filter(c => c.id !== payload.id);
-    return [...unchangedChannels, payload.attributes];
+  [actions.renameChannelSuccess](state, { payload: { channel } }) {
+    return { ...state, [channel.id]: channel };
   },
 }, []);
 

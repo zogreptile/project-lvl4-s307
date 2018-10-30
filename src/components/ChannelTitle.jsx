@@ -19,7 +19,7 @@ export default class ChannelsList extends React.Component {
 
   render() {
     const { channels, currentChannelId } = this.props;
-    const currentChannel = channels.find(c => c.id === currentChannelId);
+    const currentChannel = Object.values(channels).find(c => c.id === currentChannelId);
     const channelTitle = currentChannel.removable
       ? (
         <a className="text-dark" href="#" onClick={this.showRenameChannelModal(currentChannelId)}>

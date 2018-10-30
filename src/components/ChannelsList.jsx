@@ -51,7 +51,7 @@ export default class ChannelsList extends React.Component {
         </Button>
 
         <ListGroup as="ul">
-          {channels.map(({ id, name, removable }) => (
+          {Object.values(channels).map(({ id, name, removable }) => (
             <ListGroup.Item as="li" key={id} className={listItemClasses(id)}>
               <Button
                 block

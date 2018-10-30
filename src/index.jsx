@@ -14,6 +14,7 @@ import App from './components/App';
 import reducers from './reducers';
 import * as actions from './actions';
 import { UserContext } from './context.js';
+import normalize from './normailzeState.js';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
@@ -22,7 +23,7 @@ if (process.env.NODE_ENV !== 'production') {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducers,
-  initState,
+  normalize(initState),
   composeEnhancers(
     applyMiddleware(thunk),
   )
@@ -34,13 +35,13 @@ socket
     store.dispatch(actions.sendMessageSuccess(attributes));
   })
   .on('newChannel', ({ data: { attributes }  }) => {
-    store.dispatch(actions.addChannelSuccess(attributes));
+    store.dispatch(actions.addChannelSuccess({ channel: attributes }));
   })
   .on('removeChannel', ({ data }) => {
     store.dispatch(actions.removeChannelSuccess(data));
   })
-  .on('renameChannel', ({ data }) => {
-    store.dispatch(actions.renameChannelSuccess(data));
+  .on('renameChannel', ({ data: { attributes } }) => {
+    store.dispatch(actions.renameChannelSuccess({ channel: attributes }));
   });
 
 const username = cookies.get('username') || faker.name.findName();
