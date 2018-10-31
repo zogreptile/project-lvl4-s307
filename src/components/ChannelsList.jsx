@@ -3,9 +3,10 @@ import cn from 'classnames';
 import { connect } from 'react-redux';
 import { Button, ListGroup, Col } from 'react-bootstrap';
 import * as actionCreators from '../actions';
+import * as selectors from '../selectors';
 
 const mapStateToProps = state => ({
-  channels: state.channels,
+  channels: selectors.channelsSelector(state),
   currentChannelId: state.currentChannelId,
   addChannelModal: state.addChannelModal,
   removeChannelModal: state.removeChannelModal,
@@ -51,7 +52,7 @@ export default class ChannelsList extends React.Component {
         </Button>
 
         <ListGroup as="ul">
-          {Object.values(channels).map(({ id, name, removable }) => (
+          {channels.map(({ id, name, removable }) => (
             <ListGroup.Item as="li" key={id} className={listItemClasses(id)}>
               <Button
                 block

@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../actions';
+import * as selectors from '../selectors';
 
 const mapStateToProps = state => ({
-  channels: state.channels,
+  channels: selectors.channelsSelector(state),
   currentChannelId: state.currentChannelId,
 });
 
@@ -19,7 +20,7 @@ export default class ChannelsList extends React.Component {
 
   render() {
     const { channels, currentChannelId } = this.props;
-    const currentChannel = Object.values(channels).find(c => c.id === currentChannelId);
+    const currentChannel = channels.find(c => c.id === currentChannelId);
     const channelTitle = currentChannel.removable
       ? (
         <a className="text-dark" href="#" onClick={this.showRenameChannelModal(currentChannelId)}>
