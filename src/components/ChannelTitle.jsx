@@ -23,14 +23,16 @@ export default class ChannelsList extends React.Component {
     const currentChannel = channels.find(c => c.id === currentChannelId);
     const channelTitle = currentChannel.removable
       ? (
-        <a className="text-dark" href="#" onClick={this.showRenameChannelModal(currentChannelId)}>
+        <button
+          className="h3 bg-transparent border-0 m-0 p-0 text-dark"
+          type="button"
+          onClick={this.showRenameChannelModal(currentChannelId)}
+        >
           <u>{currentChannel.name}</u>
-        </a>
+        </button>
       )
       : currentChannel.name;
 
-    return (
-      <h3 className="mb-3">{channelTitle}</h3>
-    );
+    return <h3 className="mb-3">{channelTitle}</h3>;
   }
 }
