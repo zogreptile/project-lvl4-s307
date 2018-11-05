@@ -7,6 +7,7 @@
   },
   "scripts": {
     "test": "jest",
+    "webpack": "webpack",
     "build-server": "babel server --out-dir dist --source-maps inline",
     "build-app": "npx webpack -p --env production",
     "build": "npm run build-app && npm run build-server",
