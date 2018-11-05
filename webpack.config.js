@@ -12,6 +12,11 @@ module.exports = {
   output: {
     publicPath: '/assets/',
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   module: {
     rules: [
       {
@@ -25,11 +30,4 @@ module.exports = {
       },
     ],
   },
-  // plugins: [
-  //   new webpack.ProvidePlugin({
-  //     $: 'jquery',
-  //     jQuery: 'jquery',
-  //     'window.jQuery': 'jquery',
-  //   }),
-  // ],
 };

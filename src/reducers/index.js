@@ -57,6 +57,9 @@ const currentChannelId = handleActions({
   [actions.switchChannel](state, { payload }) {
     return payload;
   },
+  [actions.addChannelSuccess](state, { payload: { channel } }) {
+    return channel.id;
+  },
   [actions.removeChannelSuccess]() {
     const defaultActiveChannel = 1;
     return defaultActiveChannel;
