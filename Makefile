@@ -11,16 +11,8 @@ build:
 	npm run build
 	npx webpack -p --env production && babel frontend --out-dir dist --source-maps inline
 
-test:
-	npm test
-
-check-types:
-	npx flow
-
 lint:
 	npx eslint .
 
 publish:
 	npm publish
-
-.PHONY: test
