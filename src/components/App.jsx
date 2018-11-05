@@ -8,7 +8,7 @@ import AddChannelModal from './AddChannelModal';
 import RemoveChannelModal from './RemoveChannelModal';
 import RenameChannelModal from './RenameChannelModal';
 import Notification from './Notification';
-import { UserContext } from '../context';
+import UserContext from '../context';
 
 const App = () => (
   <UserContext.Consumer>

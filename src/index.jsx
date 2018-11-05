@@ -1,4 +1,4 @@
-import "@babel/polyfill";
+import '@babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -13,20 +13,21 @@ import '../assets/application.css';
 import App from './components/App';
 import reducers from './reducers';
 import * as actions from './actions';
-import { UserContext } from './context.js';
+import UserContext from './context.js';
 import normalize from './normailzeState.js';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
-};
+}
 
+/* eslint no-underscore-dangle: 0 */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducers,
   normalize(initState),
   composeEnhancers(
     applyMiddleware(thunk),
-  )
+  ),
 );
 
 const socket = io();
@@ -34,7 +35,7 @@ socket
   .on('newMessage', ({ data: { attributes } }) => {
     store.dispatch(actions.sendMessageSuccess(attributes));
   })
-  .on('newChannel', ({ data: { attributes }  }) => {
+  .on('newChannel', ({ data: { attributes } }) => {
     store.dispatch(actions.addChannelSuccess({ channel: attributes }));
   })
   .on('removeChannel', ({ data }) => {
